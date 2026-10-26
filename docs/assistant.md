@@ -25,7 +25,7 @@ When information is missing — a route with no destination, no shipment id, a w
 
 ## Sessions
 
-ADK's `DatabaseSessionService` persists every event — user turns, model text, tool calls and results — and the session state to SQLite (`data/assistant_sessions.db` on the host, `data/assistant/` in compose). `--session <id>` resumes with full history; `--no-persist` keeps it in memory. The data period is cached in session state so "this quarter" cannot drift mid-conversation.
+ADK's `DatabaseSessionService` persists every event — user turns, model text, tool calls and results — and the session state to SQLite (`data/assistant_sessions.db` on the host, the `assistant-var` volume in compose). `--session <id>` resumes with full history; `--no-persist` keeps it in memory. The data period is cached in session state so "this quarter" cannot drift mid-conversation.
 
 ## Guardrails
 
@@ -50,7 +50,7 @@ Measured on live runs at $0.30 / $2.50 per million input/output tokens: the inst
 
 ## As an HTTP API
 
-`assistant.api` wraps the same agent, sessions, guardrails and logs in a small FastAPI app. In compose it is its own container, built from the `assistant` Dockerfile target, behind the gateway at `/assistant/*`. The key comes from `.env` at run time and is never in an image; the container keeps the same hardening as the data API, with `data/assistant/` mounted for the session store and the log. Without a key it starts in a degraded state: `/assistant/health` says so and `/assistant/chat` answers `503 llm_unconfigured`.
+`assistant.api` wraps the same agent, sessions, guardrails and logs in a small FastAPI app. In compose it is its own container, built from the `assistant` Dockerfile target, behind the gateway at `/assistant/*`. The key comes from `.env` at run time and is never in an image; the container keeps the same hardening as the data API, with the `assistant-var` named volume for the session store and the log. Without a key it starts in a degraded state: `/assistant/health` says so and `/assistant/chat` answers `503 llm_unconfigured`.
 
 `POST /assistant/chat {"question": "...", "session_id": "<optional>"}` returns the answer, the session id to continue with, the tools called, token usage and estimated cost, and which guardrail fired if any. `GET /assistant/sessions` lists a user's sessions; `GET /assistant/health` reports whether the data API is reachable and which model is configured.
 
@@ -72,4 +72,4 @@ Right tools 25/25, values 20/20, grounded 25/25, cited 13/13; about $0.046 for t
 
 ## Tests
 
-30 unit tests with no network and no key: the tools against the in-process fixture API, id and port normalisation, each guardrail, the full loop through a fake LLM, session persistence across two service instances on one SQLite file, and the degraded no-key mode. `tests/integration/test_assistant_live.py` runs the three brief questions plus the clarifying case against real Gemini; it is skipped unless a key and `BASE_URL` are set and runs only in the nightly workflow.
+30 assistant unit tests with no network and no key: the tools against the in-process fixture API, id and port normalisation, each guardrail, the full loop through a fake LLM, session persistence across two service instances on one SQLite file, and the degraded no-key mode. `tests/integration/test_assistant_live.py` runs the three brief questions plus the clarifying case against real Gemini; it is skipped unless a key and `BASE_URL` are set and runs only in the nightly workflow.

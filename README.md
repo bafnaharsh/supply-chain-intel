@@ -17,18 +17,18 @@ cp .env.example .env                                 # optional: add GEMINI_API_
 docker compose --profile assistant up --build --wait # same port: /assistant/chat and /assistant/docs
 ```
 
-Interactive docs: http://localhost:8000/docs and http://localhost:8000/assistant/docs. Needs Docker Compose 2.24 or newer. Without a key the assistant container runs in a degraded state (`/assistant/health` says so, `/assistant/chat` returns 503) and nothing else is affected.
+Interactive docs: http://localhost:8000/docs and http://localhost:8000/assistant/docs. Needs Docker Compose 2.24 or newer. If port 8000 is taken, prefix the command with `PORT=8010`. Without a key the assistant container runs in a degraded state (`/assistant/health` says so, `/assistant/chat` returns 503) and nothing else is affected.
 
 Working on it locally needs [uv](https://docs.astral.sh/uv/):
 
 ```bash
-uv sync
+uv sync --all-extras                                        # --all-extras: the assistant tests need ADK
 uv run python dq_check.py --input ./data/ --markdown        # standalone data-quality check
 uv run python -m pipeline --input data/raw                  # raw → curated warehouse
 uv run uvicorn app.main:app --reload                        # the API without Docker
-uv run pytest tests/unit --cov                              # 187 tests, no infrastructure
+uv run pytest tests/unit --cov                              # 190 tests, no infrastructure
 uv run pytest tests/integration                             # against the running stack (skips if it is down)
-uv run python -m assistant "What is the delay risk for shipment 421?"   # needs the key; --offline does not
+uv run python -m assistant "What is the delay risk for shipment 421?"   # needs the key and the API on :8000; --offline needs only the API
 ```
 
 Framework: Python 3.13 with FastAPI and Pydantic v2. Endpoints: `/health`, `/shipments`, `/shipments/{id}`, `/routes/{origin}/{destination}/stats`, `/routes/stats`, `/ports`, `/predict-delay`, `/data-quality/report`. Every error uses the same `{"error": {code, message, request_id, details}}` shape, and every request is logged as one JSON line with method, path, status and latency. Details in [docs/engineering.md](docs/engineering.md).
@@ -40,7 +40,7 @@ src/pipeline    raw → staging → curated (+ quarantine) → serving views
 src/ml          Features, training with model comparison, the predictor the API loads
 src/assistant   ADK agent: tools, guardrails, sessions, CLI, HTTP API, offline mode
 src/core        One config module: settings from .env plus every tunable constant
-tests/          187 unit tests (fixture warehouse, fake LLM) and 11 integration tests
+tests/          190 unit tests (fixture warehouse, fake LLM) and 11 integration tests
 scripts/, evals/  Load test, security test, 25-question assistant evaluation
 models/, reports/ Committed model artefact and card; DQ report and data profile
 ```
@@ -101,7 +101,7 @@ Three containers behind one port. The data API has the warehouse, the DQ report 
 | LLM | Gemini `3.5-flash-lite` via Google ADK | ADK gives the tool loop, callbacks (where guardrails live) and SQLite sessions; about $0.002 per answered question |
 | Tests | pytest, FastAPI TestClient, httpx | Unit tests in-process over a fixture warehouse; integration tests against the real container |
 | Packaging, lint | uv with a lockfile, ruff | One lockfile for local, Docker and CI; one tool for lint and format |
-| Containers | Multi-stage build, distroless runtime, Caddy gateway | 492 MB with the ML stack; no shell, no pip, non-root, read-only; one entry point |
+| Containers | Multi-stage build, distroless runtime, Caddy gateway | API 492 MB with the ML stack, assistant 253 MB; no shell, no pip, non-root, read-only; one entry point |
 | CI | GitHub Actions | Lint → unit tests with a coverage gate → image build → Trivy → compose up → integration tests |
 
 **At 100× the volume** (half a million shipments, a few million events) I would keep DuckDB and change what is around it: Parquet partitions by booking month, an incremental pipeline keyed on `shipment_id` and `event_key`, DQ on the changed partitions only, and the warehouse in object storage instead of inside the image so data and code ship separately. The real switch point is not volume, it is concurrent writers and 24/7 serving — the moment ingestion runs while the API serves, point lookups and pagination should move to Postgres, with DuckDB and Parquet kept for analytics and training.
@@ -131,7 +131,7 @@ Two findings shaped the rest: `status` is a perfect leak (`DELAYED` is exactly "
 
 The honest headline: booking-time features carry almost no signal in this data. The shipped model, a calibrated HistGradientBoosting, reaches test AUC **0.535 [0.502, 0.567]** and PR-AUC 0.431 against a 0.399 base rate — measurably better than chance, and nothing more. Precision/recall/F1 are 0.398 / 0.982 / 0.566 at the tuned threshold and 0.667 / 0.004 / 0.008 at 0.5; the always-late baseline gets F1 0.57, which is why I lead with AUC and calibration rather than F1.
 
-Features are only what is known at booking: ports, cargo type, container count, weight, planned departure and arrival, and what derives from those. `status`, the actual dates and the DQ flags are excluded as leaks; customer, vessel and route ids are excluded because their late rates do not persist out of time (train→validation correlation about zero). Evaluation is a time split (train < April 2025, validate April–May, test from June) with hyper-parameters chosen on validation and test scored once. Seven candidates were compared; a written selection rule picked the base model on validation, calibrated it there, and gated it on test. The first version of the rule shipped the base-rate prior; I revised it and say so. Monitoring: every prediction is logged; retrain on drift, calibration error above 0.05, or a 5-point base-rate shift. Everything, including the full comparison table and provenance, is in [docs/ml.md](docs/ml.md) and [models/model_card.md](models/model_card.md).
+Features are only what is known at booking: ports, cargo type, container count, weight, planned departure and arrival, and what derives from those. `status`, the actual dates and the DQ flags are excluded as leaks; customer, vessel and route ids are excluded because their late rates do not persist out of time (train→validation correlation about zero). Evaluation is a time split (train < April 2025, validate April–May, test from June) with hyper-parameters chosen on validation and test scored once. Seven candidates were compared; a written selection rule picked the base model on validation, calibrated it there, and gated it on test. The first version of the rule shipped the base-rate prior; I revised it and say so. Monitoring: every prediction is logged; retrain when the AUC interval falls below the route baseline, calibration error exceeds 0.05, PSI exceeds 0.2 or the base rate moves 5 points, and monthly regardless, always behind the same champion/challenger gate. Everything, including the full comparison table and provenance, is in [docs/ml.md](docs/ml.md) and [models/model_card.md](models/model_card.md).
 
 ## GenAI assistant
 
@@ -156,7 +156,9 @@ Gemini through Google ADK, with eight tools that call the data API over HTTP: `q
 
 ## CI/CD
 
-[`ci.yml`](.github/workflows/ci.yml) runs on every push and PR: install with the lockfile, ruff lint and format check, unit tests with an 80% coverage gate, then build the image, scan it with Trivy (fails on any fixable CRITICAL/HIGH), start the stack and run the integration tests over real HTTP. In CI a missing stack is an error, not a skip.
+The repository is private, so the badge above renders only for people with access; the run history is under the repo's Actions tab.
+
+[`ci.yml`](.github/workflows/ci.yml) runs on every push and PR, as two parallel jobs. One installs with the lockfile, runs ruff lint and format check, and runs the unit tests with an 80% coverage gate; the other builds the image, scan it with Trivy (fails on any fixable CRITICAL/HIGH), start the stack and run the integration tests over real HTTP. In CI a missing stack is an error, not a skip.
 
 Environment-dependent tests, and why: the live Gemini tests need a key, so they are skipped on PRs and run in [`nightly-live.yml`](.github/workflows/nightly-live.yml) behind a repository variable and secret; the integration tests need the compose stack and skip locally when it is absent; the unit suite takes about 30 seconds rather than milliseconds, mostly importing scikit-learn and ADK.
 
@@ -180,8 +182,9 @@ The model would need a feature store once port-event features exist, because the
 - Impossible numbers (negative weight, container counts of 0 or above 100) are nulled and flagged rather than corrected, because any correction would be a guess.
 - Route stats are computed over completed shipments; the shipment count includes cancelled ones.
 - "This quarter" means the quarter of the latest booking in the data, not today's date.
+- The brief refers to "twelve DQ issues" without listing them. Profiling found 21 distinct failing checks, which I treat as a superset of the twelve.
 
-## AI usage
+## Where AI helped and the key decisions
 
 I used Google's Antigravity as my coding agent throughout, as the brief invites. It was most useful for the mechanical parts: scaffolding the FastAPI service and the test suites, turning my DQ rules into SQL and fixtures, generating the model comparison harness from my evaluation design, and drafting documentation that I then rewrote. I also used it as a second pair of eyes — a strict review pass found the calendar-day bug in `transit_days` and a request-id header missing on unhandled errors, both of which I fixed.
 

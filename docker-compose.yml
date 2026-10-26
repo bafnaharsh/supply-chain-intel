@@ -5,7 +5,7 @@ services:
   gateway:
     image: caddy:2-alpine
     ports:
-      - "8000:8000"
+      - "${PORT:-8000}:8000" # PORT=8010 docker compose up ... if 8000 is taken
     volumes:
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
     depends_on:
@@ -51,7 +51,9 @@ services:
     expose:
       - "8001"
     volumes:
-      - ./data/assistant:/app/var # sessions (SQLite) and the LLM call log survive restarts
+      # Named volume, not a bind mount: a host dir Docker creates is root-owned on Linux and
+      # unwritable for uid 65532. Read the log with: docker compose cp assistant:/app/var/assistant.jsonl .
+      - assistant-var:/app/var # sessions (SQLite) and the LLM call log survive restarts
     depends_on:
       api:
         condition: service_healthy
@@ -59,3 +61,6 @@ services:
     read_only: true
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
+
+volumes:
+  assistant-var:

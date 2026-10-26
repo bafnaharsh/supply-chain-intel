@@ -14,7 +14,7 @@ The figures in the "Observed quality issues" sections come from the first profil
 
 - [`../reports/data_profile.json`](../reports/data_profile.json): every column of every file — inferred type, nulls, distinct count, range, top values (`python -m dq profile`).
 - [`../reports/dq_report.json`](../reports/dq_report.json): one entry per check with rows affected, severity, action and reasoning (`python -m dq check`). Served unchanged by `GET /data-quality/report`.
-- The README "Data quality summary" and "Data model" sections describe how each issue is handled in the curated layer.
+- The README "Data quality summary" and the data model in [docs/data.md](../docs/data.md) describe how each issue is handled in the curated layer.
 
 ---
 
