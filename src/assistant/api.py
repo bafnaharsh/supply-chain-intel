@@ -5,6 +5,7 @@ Runs on the host next to the Gemini key, talking to the data API over HTTP:
     uv run uvicorn assistant.api:app --port 8001      # then open http://localhost:8001/docs
 """
 
+import asyncio
 import logging
 import os
 from contextlib import asynccontextmanager
@@ -17,6 +18,7 @@ from google.adk.sessions import BaseSessionService
 from pydantic import BaseModel, Field
 
 from app.errors import APIError, register_error_handlers
+from app.middleware import add_request_logging
 from app.schemas import ErrorResponse
 from assistant import tools
 from assistant.agent import build_agent, configure_logging
@@ -81,6 +83,10 @@ def create_app(
         root_path=settings.assistant_root_path,  # the gateway strips /assistant before proxying
     )
     register_error_handlers(app)
+    add_request_logging(app, logging.getLogger("assistant.http"))
+    # shortcut: one lock per session for the process lifetime; fine for a single worker, needs a
+    # shared lock (or a DB row lock) once there are several replicas.
+    locks: dict[tuple[str, str], asyncio.Lock] = {}
 
     @app.get("/health")
     def health() -> dict[str, str]:
@@ -104,13 +110,17 @@ def create_app(
         if app.state.agent is None:
             raise APIError(503, "llm_unconfigured", "GEMINI_API_KEY is not set; see .env.example")
         session = await get_or_create_session(app.state.sessions, body.user_id, body.session_id)
-        r = await ask(
-            body.question,
-            agent=app.state.agent,
-            session_service=app.state.sessions,
-            user_id=body.user_id,
-            session_id=session.id,
-        )
+        # Two concurrent turns on one session would interleave the per-turn counters and race on
+        # appending events; serialise per session (different sessions still run in parallel).
+        lock = locks.setdefault((body.user_id, session.id), asyncio.Lock())
+        async with lock:
+            r = await ask(
+                body.question,
+                agent=app.state.agent,
+                session_service=app.state.sessions,
+                user_id=body.user_id,
+                session_id=session.id,
+            )
         return ChatResponse(
             answer=r.text,
             session_id=session.id,

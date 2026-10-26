@@ -1,14 +1,14 @@
 import logging
 import time
 from contextlib import asynccontextmanager
-from uuid import uuid4
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 
 from app import __version__
 from app.db import Database
 from app.errors import register_error_handlers
 from app.logging_config import configure_logging
+from app.middleware import add_request_logging
 from app.routers import data_quality, health, ports, predict, routes, shipments
 from app.schemas import ErrorResponse
 from core.config import settings
@@ -48,33 +48,7 @@ def create_app() -> FastAPI:
         responses={422: {"model": ErrorResponse}, 500: {"model": ErrorResponse}},
     )
     register_error_handlers(app)
-
-    @app.middleware("http")
-    async def log_requests(request: Request, call_next):
-        # A client id is honoured only if it looks like one; anything else is replaced.
-        client_id = request.headers.get("x-request-id", "")
-        request.state.request_id = (
-            client_id if 0 < len(client_id) <= 128 and client_id.isprintable() else uuid4().hex
-        )
-        start = time.perf_counter()
-        status = 500  # stays 500 if the handler raises
-        try:
-            response = await call_next(request)
-            status = response.status_code
-        finally:
-            log.info(
-                "request",
-                extra={
-                    "request_id": request.state.request_id,
-                    "method": request.method,
-                    "path": request.url.path,
-                    "status": status,
-                    "latency_ms": round((time.perf_counter() - start) * 1000, 2),
-                },
-            )
-        response.headers["x-request-id"] = request.state.request_id
-        return response
-
+    add_request_logging(app, log)
     for r in (health, shipments, ports, routes, predict, data_quality):
         app.include_router(r.router)
     return app

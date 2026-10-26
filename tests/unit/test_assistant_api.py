@@ -25,7 +25,7 @@ def chat(client):
 
 def test_health_reports_data_api_and_model(chat):
     r = chat.get("/health")
-    assert r.status_code == 200
+    assert r.status_code == 200 and r.headers["x-request-id"]
     assert r.json() == {"status": "ok", "data_api": "ok", "model": "gemini-3.5-flash-lite"}
 
 
@@ -47,6 +47,36 @@ def test_chat_resumes_session_and_lists_it(chat):
     assert second.json()["session_id"] == first["session_id"]
     sessions = chat.get("/sessions").json()
     assert [s["session_id"] for s in sessions] == [first["session_id"]]
+
+
+def test_concurrent_turns_on_one_session_are_serialised(client):
+    """Two simultaneous turns on the same session must not interleave."""
+    import asyncio
+
+    import httpx
+
+    fake = FakeLlm(model="gemini-3.5-flash-lite", script=_script() * 3)
+    app = create_app(
+        agent=agent_mod.build_agent(fake),
+        session_service=InMemorySessionService(),
+        api_client=client,
+        log=False,
+    )
+
+    async def run():
+        transport = httpx.ASGITransport(app=app)
+        async with (
+            app.router.lifespan_context(app),
+            httpx.AsyncClient(transport=transport, base_url="http://t") as c,
+        ):
+            sid = (await c.post("/chat", json={"question": "first"})).json()["session_id"]
+            body = {"question": "again", "session_id": sid}
+            return await asyncio.gather(c.post("/chat", json=body), c.post("/chat", json=body))
+
+    a, b = asyncio.run(run())
+    assert a.status_code == b.status_code == 200
+    # Each turn ran its full scripted tool call + answer: nothing was interleaved or dropped.
+    assert a.json()["tools_called"] == b.json()["tools_called"] == ["get_route_stats"]
 
 
 def test_without_key_is_degraded_not_dead(client, monkeypatch):

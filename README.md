@@ -62,7 +62,7 @@ flowchart LR
     end
     subgraph API["Data API (FastAPI)"]
         MW[request id + JSON logs<br/>structured errors]
-        EP[/health /shipments /routes<br/>/ports /predict-delay /data-quality]
+        EP["/health · /shipments · /routes<br/>/ports · /predict-delay · /data-quality"]
     end
     subgraph Assistant["Assistant (Google ADK)"]
         ASSIST[8 tools · guardrails<br/>CLI · HTTP · offline]
@@ -75,7 +75,7 @@ flowchart LR
 
     USER --> GW
     GW --> MW --> EP
-    GW -- /assistant/* --> ASSIST
+    GW -- "/assistant/*" --> ASSIST
     RAW --> DQ --> REPORT
     RAW --> PIPE --> STORE
     STORE --> TRAIN --> MODEL

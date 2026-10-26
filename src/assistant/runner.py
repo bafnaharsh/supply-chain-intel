@@ -2,7 +2,7 @@
 
 from google.adk.agents import LlmAgent
 from google.adk.agents.invocation_context import LlmCallsLimitExceededError
-from google.adk.agents.run_config import RunConfig
+from google.adk.agents.run_config import RunConfig, ToolThreadPoolConfig
 from google.adk.runners import Runner
 from google.adk.sessions import BaseSessionService
 from google.genai import types
@@ -26,7 +26,12 @@ async def ask(
     runner = Runner(agent=agent, app_name=ASSISTANT_APP_NAME, session_service=session_service)
     message = types.Content(role="user", parts=[types.Part(text=question)])
     # Second belt behind the before_model guardrail, which blocks call max+1 first.
-    run_config = RunConfig(max_llm_calls=settings.assistant_max_llm_calls)
+    run_config = RunConfig(
+        max_llm_calls=settings.assistant_max_llm_calls,
+        # The tools are synchronous HTTP calls; on the pool they no longer block the event loop,
+        # so one slow tool call in the assistant API does not stall every other chat.
+        tool_thread_pool_config=ToolThreadPoolConfig(max_workers=8),
+    )
     text, tools_called, p_tok, o_tok, guardrail = "", [], 0, 0, None
     try:
         async for event in runner.run_async(

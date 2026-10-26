@@ -15,10 +15,13 @@ http: httpx.Client | None = None  # set by configure(); tests inject the FastAPI
 _ID_SEPARATORS = str.maketrans("", "", " _-#")
 
 
+_ports_cache: list[dict] | None = None  # reference data: fetched once per configured client
+
+
 def configure(client: httpx.Client) -> None:
     """Point the tools at an API client (base_url already set)."""
-    global http
-    http = client
+    global http, _ports_cache
+    http, _ports_cache = client, None
 
 
 def _error(message: str, hint: str = "") -> dict:
@@ -57,11 +60,14 @@ def list_ports() -> dict:
 
     Use when the user asks which ports exist or you need to show port options.
     """
-    data, err = _call("GET", "/ports")
-    if err:
-        return err
-    keys = ("port_code", "port_name", "country", "region")
-    return {"status": "ok", "ports": [{k: p[k] for k in keys} for p in data]}
+    global _ports_cache
+    if _ports_cache is None:  # resolve_port calls this on every name; ports never change at runtime
+        data, err = _call("GET", "/ports")
+        if err:
+            return err
+        keys = ("port_code", "port_name", "country", "region")
+        _ports_cache = [{k: p[k] for k in keys} for p in data]
+    return {"status": "ok", "ports": _ports_cache}
 
 
 def resolve_port(name_or_code: str) -> dict:
