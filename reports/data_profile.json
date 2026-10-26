@@ -1,0 +1,1253 @@
+{
+  "input_dir": "data\\raw",
+  "files": {
+    "shipments.csv": {
+      "rows": 5028,
+      "columns": 14,
+      "exact_duplicate_rows": 8,
+      "first_column": "shipment_id",
+      "first_column_duplicated_values": 28,
+      "column_profiles": {
+        "shipment_id": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 5000,
+          "length": {
+            "min": 9,
+            "max": 9
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "SHP-00010",
+              "count": 2
+            },
+            {
+              "value": "SHP-00077",
+              "count": 2
+            },
+            {
+              "value": "SHP-00232",
+              "count": 2
+            },
+            {
+              "value": "SHP-00275",
+              "count": 2
+            },
+            {
+              "value": "SHP-00657",
+              "count": 2
+            },
+            {
+              "value": "SHP-00814",
+              "count": 2
+            },
+            {
+              "value": "SHP-01198",
+              "count": 2
+            },
+            {
+              "value": "SHP-01224",
+              "count": 2
+            },
+            {
+              "value": "SHP-01379",
+              "count": 2
+            },
+            {
+              "value": "SHP-01383",
+              "count": 2
+            },
+            {
+              "value": "SHP-01588",
+              "count": 2
+            },
+            {
+              "value": "SHP-01617",
+              "count": 2
+            }
+          ]
+        },
+        "customer_id": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 251,
+          "length": {
+            "min": 9,
+            "max": 9
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "CUST-1014",
+              "count": 32
+            },
+            {
+              "value": "CUST-1043",
+              "count": 31
+            },
+            {
+              "value": "CUST-1226",
+              "count": 31
+            },
+            {
+              "value": "CUST-1117",
+              "count": 30
+            },
+            {
+              "value": "CUST-1173",
+              "count": 28
+            },
+            {
+              "value": "CUST-1001",
+              "count": 27
+            },
+            {
+              "value": "CUST-1096",
+              "count": 27
+            },
+            {
+              "value": "CUST-1098",
+              "count": 27
+            },
+            {
+              "value": "CUST-1099",
+              "count": 27
+            },
+            {
+              "value": "CUST-1103",
+              "count": 27
+            },
+            {
+              "value": "CUST-1141",
+              "count": 27
+            },
+            {
+              "value": "CUST-1186",
+              "count": 27
+            }
+          ]
+        },
+        "origin_port": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 28,
+          "length": {
+            "min": 5,
+            "max": 5
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "USLAX",
+              "count": 232
+            },
+            {
+              "value": "MYPKG",
+              "count": 217
+            },
+            {
+              "value": "NLRTM",
+              "count": 217
+            },
+            {
+              "value": "AEDXB",
+              "count": 216
+            },
+            {
+              "value": "INMUN",
+              "count": 216
+            },
+            {
+              "value": "HKHKG",
+              "count": 215
+            },
+            {
+              "value": "ESVLC",
+              "count": 210
+            },
+            {
+              "value": "CNNGB",
+              "count": 209
+            },
+            {
+              "value": "JPYOK",
+              "count": 203
+            },
+            {
+              "value": "DEHAM",
+              "count": 201
+            },
+            {
+              "value": "KRPUS",
+              "count": 201
+            },
+            {
+              "value": "USSAV",
+              "count": 201
+            }
+          ]
+        },
+        "destination_port": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 28,
+          "length": {
+            "min": 5,
+            "max": 5
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "MYPKG",
+              "count": 230
+            },
+            {
+              "value": "AEDXB",
+              "count": 218
+            },
+            {
+              "value": "ESVLC",
+              "count": 218
+            },
+            {
+              "value": "GBFXT",
+              "count": 216
+            },
+            {
+              "value": "CNNGB",
+              "count": 210
+            },
+            {
+              "value": "KRPUS",
+              "count": 208
+            },
+            {
+              "value": "INNSA",
+              "count": 207
+            },
+            {
+              "value": "USLGB",
+              "count": 204
+            },
+            {
+              "value": "BRSSZ",
+              "count": 203
+            },
+            {
+              "value": "USLAX",
+              "count": 203
+            },
+            {
+              "value": "USNYC",
+              "count": 202
+            },
+            {
+              "value": "CNSZX",
+              "count": 201
+            }
+          ]
+        },
+        "vessel_id": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 80,
+          "length": {
+            "min": 8,
+            "max": 8
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "VSL-0070",
+              "count": 88
+            },
+            {
+              "value": "VSL-0045",
+              "count": 79
+            },
+            {
+              "value": "VSL-0066",
+              "count": 79
+            },
+            {
+              "value": "VSL-0033",
+              "count": 77
+            },
+            {
+              "value": "VSL-0067",
+              "count": 77
+            },
+            {
+              "value": "VSL-0078",
+              "count": 77
+            },
+            {
+              "value": "VSL-0011",
+              "count": 75
+            },
+            {
+              "value": "VSL-0069",
+              "count": 75
+            },
+            {
+              "value": "VSL-0017",
+              "count": 73
+            },
+            {
+              "value": "VSL-0036",
+              "count": 73
+            },
+            {
+              "value": "VSL-0039",
+              "count": 73
+            },
+            {
+              "value": "VSL-0049",
+              "count": 73
+            }
+          ]
+        },
+        "booking_date": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 4117,
+          "length": {
+            "min": 19,
+            "max": 19
+          },
+          "untrimmed": 0,
+          "inferred_type": "timestamp",
+          "range": {
+            "min": "2024-06-01 02:00:00",
+            "max": "2025-10-14 19:00:00"
+          }
+        },
+        "planned_departure": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 4127,
+          "length": {
+            "min": 19,
+            "max": 19
+          },
+          "untrimmed": 0,
+          "inferred_type": "timestamp",
+          "range": {
+            "min": "2024-06-04 17:00:00",
+            "max": "2025-10-27 13:00:00"
+          }
+        },
+        "actual_departure": {
+          "rows": 5028,
+          "nulls": 349,
+          "null_pct": 6.94,
+          "distinct": 3899,
+          "length": {
+            "min": 19,
+            "max": 19
+          },
+          "untrimmed": 0,
+          "inferred_type": "timestamp",
+          "range": {
+            "min": "2024-06-04 12:00:00",
+            "max": "2025-10-27 22:00:00"
+          }
+        },
+        "planned_arrival": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 4133,
+          "length": {
+            "min": 19,
+            "max": 19
+          },
+          "untrimmed": 0,
+          "inferred_type": "timestamp",
+          "range": {
+            "min": "2024-06-15 00:00:00",
+            "max": "2025-11-27 16:00:00"
+          }
+        },
+        "actual_arrival": {
+          "rows": 5028,
+          "nulls": 349,
+          "null_pct": 6.94,
+          "distinct": 3847,
+          "length": {
+            "min": 19,
+            "max": 19
+          },
+          "untrimmed": 0,
+          "inferred_type": "timestamp",
+          "range": {
+            "min": "2024-06-15 18:00:00",
+            "max": "2025-11-27 23:00:00"
+          }
+        },
+        "container_count": {
+          "rows": 5028,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 58,
+          "length": {
+            "min": 1,
+            "max": 3
+          },
+          "untrimmed": 0,
+          "inferred_type": "number",
+          "range": {
+            "min": 0.0,
+            "max": 996.0,
+            "mean": 22.858,
+            "median": 21.0
+          },
+          "non_positive": 23
+        },
+        "cargo_type": {
+          "rows": 5028,
+          "nulls": 15,
+          "null_pct": 0.3,
+          "distinct": 17,
+          "length": {
+            "min": 7,
+            "max": 16
+          },
+          "untrimmed": 75,
+          "inferred_type": "string",
+          "mixed_case": 4938,
+          "top_values": [
+            {
+              "value": "Furniture",
+              "count": 500
+            },
+            {
+              "value": "Automotive Parts",
+              "count": 488
+            },
+            {
+              "value": "Machinery",
+              "count": 481
+            },
+            {
+              "value": "Pharmaceuticals",
+              "count": 479
+            },
+            {
+              "value": "Electronics",
+              "count": 477
+            },
+            {
+              "value": "Chemicals",
+              "count": 476
+            },
+            {
+              "value": "Consumer Goods",
+              "count": 466
+            },
+            {
+              "value": "Apparel",
+              "count": 465
+            },
+            {
+              "value": "Food & Beverage",
+              "count": 463
+            },
+            {
+              "value": "Raw Materials",
+              "count": 457
+            },
+            {
+              "value": "FURNITURE",
+              "count": 44
+            },
+            {
+              "value": " Chemicals",
+              "count": 42
+            }
+          ]
+        },
+        "weight_tons": {
+          "rows": 5028,
+          "nulls": 73,
+          "null_pct": 1.45,
+          "distinct": 4894,
+          "length": {
+            "min": 4,
+            "max": 7
+          },
+          "untrimmed": 0,
+          "inferred_type": "number",
+          "range": {
+            "min": -197.87,
+            "max": 2797.37,
+            "mean": 1415.747,
+            "median": 1411.52
+          },
+          "non_positive": 36
+        },
+        "status": {
+          "rows": 5028,
+          "nulls": 20,
+          "null_pct": 0.4,
+          "distinct": 7,
+          "length": {
+            "min": 3,
+            "max": 9
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 58,
+          "top_values": [
+            {
+              "value": "DELIVERED",
+              "count": 2778
+            },
+            {
+              "value": "DELAYED",
+              "count": 1901
+            },
+            {
+              "value": "CANCELLED",
+              "count": 203
+            },
+            {
+              "value": "COMPLETED",
+              "count": 34
+            },
+            {
+              "value": "N/A",
+              "count": 34
+            },
+            {
+              "value": "Complete",
+              "count": 30
+            },
+            {
+              "value": "delivered",
+              "count": 28
+            }
+          ]
+        }
+      }
+    },
+    "ports.csv": {
+      "rows": 25,
+      "columns": 6,
+      "exact_duplicate_rows": 0,
+      "first_column": "port_code",
+      "first_column_duplicated_values": 0,
+      "column_profiles": {
+        "port_code": {
+          "rows": 25,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 25,
+          "length": {
+            "min": 5,
+            "max": 5
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "AEDXB",
+              "count": 1
+            },
+            {
+              "value": "BEANR",
+              "count": 1
+            },
+            {
+              "value": "BRSSZ",
+              "count": 1
+            },
+            {
+              "value": "CNNGB",
+              "count": 1
+            },
+            {
+              "value": "CNSHA",
+              "count": 1
+            },
+            {
+              "value": "CNSZX",
+              "count": 1
+            },
+            {
+              "value": "DEHAM",
+              "count": 1
+            },
+            {
+              "value": "EGPSD",
+              "count": 1
+            },
+            {
+              "value": "ESVLC",
+              "count": 1
+            },
+            {
+              "value": "GBFXT",
+              "count": 1
+            },
+            {
+              "value": "HKHKG",
+              "count": 1
+            },
+            {
+              "value": "INMUN",
+              "count": 1
+            }
+          ]
+        },
+        "port_name": {
+          "rows": 25,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 25,
+          "length": {
+            "min": 5,
+            "max": 12
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 25,
+          "top_values": [
+            {
+              "value": "Antwerp",
+              "count": 1
+            },
+            {
+              "value": "Busan",
+              "count": 1
+            },
+            {
+              "value": "Durban",
+              "count": 1
+            },
+            {
+              "value": "Felixstowe",
+              "count": 1
+            },
+            {
+              "value": "Hamburg",
+              "count": 1
+            },
+            {
+              "value": "Hong Kong",
+              "count": 1
+            },
+            {
+              "value": "Jebel Ali",
+              "count": 1
+            },
+            {
+              "value": "Karachi",
+              "count": 1
+            },
+            {
+              "value": "Laem Chabang",
+              "count": 1
+            },
+            {
+              "value": "Long Beach",
+              "count": 1
+            },
+            {
+              "value": "Los Angeles",
+              "count": 1
+            },
+            {
+              "value": "Mundra",
+              "count": 1
+            }
+          ]
+        },
+        "country": {
+          "rows": 25,
+          "nulls": 1,
+          "null_pct": 4.0,
+          "distinct": 18,
+          "length": {
+            "min": 2,
+            "max": 12
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 18,
+          "top_values": [
+            {
+              "value": "USA",
+              "count": 4
+            },
+            {
+              "value": "China",
+              "count": 3
+            },
+            {
+              "value": "India",
+              "count": 2
+            },
+            {
+              "value": "Brazil",
+              "count": 1
+            },
+            {
+              "value": "Egypt",
+              "count": 1
+            },
+            {
+              "value": "Germany",
+              "count": 1
+            },
+            {
+              "value": "Hong Kong",
+              "count": 1
+            },
+            {
+              "value": "Japan",
+              "count": 1
+            },
+            {
+              "value": "Malaysia",
+              "count": 1
+            },
+            {
+              "value": "Netherlands",
+              "count": 1
+            },
+            {
+              "value": "Pakistan",
+              "count": 1
+            },
+            {
+              "value": "Singapore",
+              "count": 1
+            }
+          ]
+        },
+        "region": {
+          "rows": 25,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 4,
+          "length": {
+            "min": 3,
+            "max": 4
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "APAC",
+              "count": 12
+            },
+            {
+              "value": "AMER",
+              "count": 5
+            },
+            {
+              "value": "EUR",
+              "count": 5
+            },
+            {
+              "value": "MEA",
+              "count": 3
+            }
+          ]
+        },
+        "timezone": {
+          "rows": 25,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 12,
+          "length": {
+            "min": 5,
+            "max": 8
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "UTC+8",
+              "count": 6
+            },
+            {
+              "value": "UTC+1",
+              "count": 4
+            },
+            {
+              "value": "UTC+2",
+              "count": 2
+            },
+            {
+              "value": "UTC+5:30",
+              "count": 2
+            },
+            {
+              "value": "UTC+9",
+              "count": 2
+            },
+            {
+              "value": "UTC-5",
+              "count": 2
+            },
+            {
+              "value": "UTC-8",
+              "count": 2
+            },
+            {
+              "value": "UTC+0",
+              "count": 1
+            },
+            {
+              "value": "UTC+4",
+              "count": 1
+            },
+            {
+              "value": "UTC+5",
+              "count": 1
+            },
+            {
+              "value": "UTC+7",
+              "count": 1
+            },
+            {
+              "value": "UTC-3",
+              "count": 1
+            }
+          ]
+        },
+        "avg_congestion_score": {
+          "rows": 25,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 16,
+          "length": {
+            "min": 3,
+            "max": 4
+          },
+          "untrimmed": 0,
+          "inferred_type": "number",
+          "range": {
+            "min": 0.55,
+            "max": 0.85,
+            "mean": 0.688,
+            "median": 0.68
+          },
+          "non_positive": 0,
+          "top_values": [
+            {
+              "value": "0.6",
+              "count": 3
+            },
+            {
+              "value": "0.68",
+              "count": 3
+            },
+            {
+              "value": "0.72",
+              "count": 3
+            },
+            {
+              "value": "0.55",
+              "count": 2
+            },
+            {
+              "value": "0.7",
+              "count": 2
+            },
+            {
+              "value": "0.8",
+              "count": 2
+            },
+            {
+              "value": "0.58",
+              "count": 1
+            },
+            {
+              "value": "0.62",
+              "count": 1
+            },
+            {
+              "value": "0.65",
+              "count": 1
+            },
+            {
+              "value": "0.66",
+              "count": 1
+            },
+            {
+              "value": "0.67",
+              "count": 1
+            },
+            {
+              "value": "0.73",
+              "count": 1
+            }
+          ]
+        }
+      }
+    },
+    "port_events.csv": {
+      "rows": 25000,
+      "columns": 7,
+      "exact_duplicate_rows": 0,
+      "first_column": "event_id",
+      "first_column_duplicated_values": 103,
+      "column_profiles": {
+        "event_id": {
+          "rows": 25000,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 24897,
+          "length": {
+            "min": 10,
+            "max": 10
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "EVT-000083",
+              "count": 2
+            },
+            {
+              "value": "EVT-000108",
+              "count": 2
+            },
+            {
+              "value": "EVT-000140",
+              "count": 2
+            },
+            {
+              "value": "EVT-000148",
+              "count": 2
+            },
+            {
+              "value": "EVT-000238",
+              "count": 2
+            },
+            {
+              "value": "EVT-000279",
+              "count": 2
+            },
+            {
+              "value": "EVT-000283",
+              "count": 2
+            },
+            {
+              "value": "EVT-000365",
+              "count": 2
+            },
+            {
+              "value": "EVT-000441",
+              "count": 2
+            },
+            {
+              "value": "EVT-000464",
+              "count": 2
+            },
+            {
+              "value": "EVT-000471",
+              "count": 2
+            },
+            {
+              "value": "EVT-000572",
+              "count": 2
+            }
+          ]
+        },
+        "event_timestamp": {
+          "rows": 25000,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 24544,
+          "length": {
+            "min": 19,
+            "max": 19
+          },
+          "untrimmed": 0,
+          "inferred_type": "timestamp",
+          "range": {
+            "min": "2024-06-01 00:02:00",
+            "max": "2025-10-14 23:55:00"
+          }
+        },
+        "port_code": {
+          "rows": 25000,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 25,
+          "length": {
+            "min": 5,
+            "max": 5
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "SGSIN",
+              "count": 1065
+            },
+            {
+              "value": "PKKAR",
+              "count": 1061
+            },
+            {
+              "value": "INMUN",
+              "count": 1040
+            },
+            {
+              "value": "EGPSD",
+              "count": 1030
+            },
+            {
+              "value": "USLAX",
+              "count": 1018
+            },
+            {
+              "value": "JPYOK",
+              "count": 1016
+            },
+            {
+              "value": "NLRTM",
+              "count": 1011
+            },
+            {
+              "value": "KRPUS",
+              "count": 1004
+            },
+            {
+              "value": "CNSZX",
+              "count": 1002
+            },
+            {
+              "value": "THBKK",
+              "count": 1001
+            },
+            {
+              "value": "USLGB",
+              "count": 999
+            },
+            {
+              "value": "HKHKG",
+              "count": 997
+            }
+          ]
+        },
+        "vessel_id": {
+          "rows": 25000,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 82,
+          "length": {
+            "min": 8,
+            "max": 8
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "VSL-0069",
+              "count": 370
+            },
+            {
+              "value": "VSL-0004",
+              "count": 344
+            },
+            {
+              "value": "VSL-0062",
+              "count": 344
+            },
+            {
+              "value": "VSL-0056",
+              "count": 338
+            },
+            {
+              "value": "VSL-0070",
+              "count": 335
+            },
+            {
+              "value": "VSL-0052",
+              "count": 331
+            },
+            {
+              "value": "VSL-0006",
+              "count": 330
+            },
+            {
+              "value": "VSL-0048",
+              "count": 329
+            },
+            {
+              "value": "VSL-0007",
+              "count": 328
+            },
+            {
+              "value": "VSL-0008",
+              "count": 328
+            },
+            {
+              "value": "VSL-0024",
+              "count": 328
+            },
+            {
+              "value": "VSL-0040",
+              "count": 327
+            }
+          ]
+        },
+        "event_type": {
+          "rows": 25000,
+          "nulls": 140,
+          "null_pct": 0.56,
+          "distinct": 7,
+          "length": {
+            "min": 7,
+            "max": 16
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 0,
+          "top_values": [
+            {
+              "value": "INSPECTION",
+              "count": 3671
+            },
+            {
+              "value": "ARRIVAL",
+              "count": 3654
+            },
+            {
+              "value": "LOADING_COMPLETE",
+              "count": 3580
+            },
+            {
+              "value": "CUSTOMS_CLEARED",
+              "count": 3567
+            },
+            {
+              "value": "BERTHED",
+              "count": 3509
+            },
+            {
+              "value": "DEPARTURE",
+              "count": 3475
+            },
+            {
+              "value": "DELAYED",
+              "count": 3404
+            }
+          ]
+        },
+        "delay_minutes": {
+          "rows": 25000,
+          "nulls": 0,
+          "null_pct": 0.0,
+          "distinct": 301,
+          "length": {
+            "min": 1,
+            "max": 3
+          },
+          "untrimmed": 0,
+          "inferred_type": "number",
+          "range": {
+            "min": 0.0,
+            "max": 300.0,
+            "mean": 26.63,
+            "median": 0.0
+          },
+          "non_positive": 16354
+        },
+        "notes": {
+          "rows": 25000,
+          "nulls": 1913,
+          "null_pct": 7.65,
+          "distinct": 12,
+          "length": {
+            "min": 17,
+            "max": 36
+          },
+          "untrimmed": 0,
+          "inferred_type": "string",
+          "mixed_case": 23087,
+          "top_values": [
+            {
+              "value": "Weather delay – storm",
+              "count": 2045
+            },
+            {
+              "value": "Priority cargo re-sequencing",
+              "count": 2007
+            },
+            {
+              "value": "High tide window missed",
+              "count": 1984
+            },
+            {
+              "value": "Normal operations",
+              "count": 1943
+            },
+            {
+              "value": "Reefer unit fault",
+              "count": 1943
+            },
+            {
+              "value": "Port strike affecting berth 4",
+              "count": 1931
+            },
+            {
+              "value": "Equipment failure – conveyor belt",
+              "count": 1911
+            },
+            {
+              "value": "Weather delay – fog",
+              "count": 1908
+            },
+            {
+              "value": "Berth congestion – 3 vessels waiting",
+              "count": 1897
+            },
+            {
+              "value": "Labour shortage reported",
+              "count": 1885
+            },
+            {
+              "value": "Crane maintenance window",
+              "count": 1831
+            },
+            {
+              "value": "Customs inspection required",
+              "count": 1802
+            }
+          ]
+        }
+      }
+    }
+  }
+}

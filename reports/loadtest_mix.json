@@ -1,0 +1,171 @@
+{
+  "scenario": "mix",
+  "concurrency": 50,
+  "duration_s": 60.0,
+  "seed": 42,
+  "wall_s": 60.95,
+  "total": {
+    "endpoint": "TOTAL",
+    "requests": 2102,
+    "http_errors": 6,
+    "exceptions": 0,
+    "p50_ms": 1124.5,
+    "p95_ms": 3971.0,
+    "p99_ms": 4663.7,
+    "max_ms": 5261.6,
+    "rps": 34.5
+  },
+  "endpoints": [
+    {
+      "endpoint": "GET /health",
+      "requests": 152,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 152
+      },
+      "p50_ms": 825.7,
+      "p95_ms": 1341.6,
+      "p99_ms": 1654.7,
+      "max_ms": 1662.8,
+      "rps": 2.5
+    },
+    {
+      "endpoint": "GET /ports",
+      "requests": 152,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 152
+      },
+      "p50_ms": 1065.9,
+      "p95_ms": 1386.2,
+      "p99_ms": 1728.3,
+      "max_ms": 1850.0,
+      "rps": 2.5
+    },
+    {
+      "endpoint": "GET /routes/stats?limit=100",
+      "requests": 123,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 123
+      },
+      "p50_ms": 1092.6,
+      "p95_ms": 1472.5,
+      "p99_ms": 1684.4,
+      "max_ms": 1764.1,
+      "rps": 2.0
+    },
+    {
+      "endpoint": "GET /routes/{o}/{d}/stats",
+      "requests": 293,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 293
+      },
+      "p50_ms": 1060.5,
+      "p95_ms": 1628.8,
+      "p99_ms": 1870.9,
+      "max_ms": 2115.3,
+      "rps": 4.8
+    },
+    {
+      "endpoint": "GET /shipments wide window",
+      "requests": 143,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 143
+      },
+      "p50_ms": 1162.3,
+      "p95_ms": 1669.5,
+      "p99_ms": 1879.0,
+      "max_ms": 1925.1,
+      "rps": 2.3
+    },
+    {
+      "endpoint": "GET /shipments/{id}",
+      "requests": 445,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 445
+      },
+      "p50_ms": 1064.8,
+      "p95_ms": 1456.8,
+      "p99_ms": 1717.1,
+      "max_ms": 1864.8,
+      "rps": 7.3
+    },
+    {
+      "endpoint": "GET /shipments?limit=500&offset=N",
+      "requests": 234,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 234
+      },
+      "p50_ms": 1191.3,
+      "p95_ms": 1767.8,
+      "p99_ms": 1944.6,
+      "max_ms": 2236.2,
+      "rps": 3.8
+    },
+    {
+      "endpoint": "GET /shipments?origin&limit=50",
+      "requests": 311,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 311
+      },
+      "p50_ms": 1143.0,
+      "p95_ms": 1628.0,
+      "p99_ms": 1826.1,
+      "max_ms": 2132.8,
+      "rps": 5.1
+    },
+    {
+      "endpoint": "POST /predict-delay (features)",
+      "requests": 116,
+      "http_errors": 6,
+      "exceptions": 0,
+      "status_counts": {
+        "422": 6,
+        "200": 110
+      },
+      "p50_ms": 3791.9,
+      "p95_ms": 4802.4,
+      "p99_ms": 5070.8,
+      "max_ms": 5261.6,
+      "rps": 1.9
+    },
+    {
+      "endpoint": "POST /predict-delay (id)",
+      "requests": 133,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 133
+      },
+      "p50_ms": 3857.2,
+      "p95_ms": 4801.7,
+      "p99_ms": 5173.3,
+      "max_ms": 5191.2,
+      "rps": 2.2
+    }
+  ],
+  "health_probe": {
+    "samples": 54,
+    "non_200": 0,
+    "p50_ms": 837.8,
+    "p95_ms": 1199.3,
+    "max_ms": 1420.9
+  },
+  "exception_kinds": {},
+  "post_health_status": 200,
+  "recovery": []
+}

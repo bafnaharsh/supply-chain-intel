@@ -1,0 +1,61 @@
+# One port for everything: the gateway on :8000 routes /assistant/* to the assistant and the
+# rest to the data API.  `docker compose up --wait` = gateway + data API.
+# `docker compose --profile assistant up --wait` adds the assistant (needs GEMINI_API_KEY in .env).
+services:
+  gateway:
+    image: caddy:2-alpine
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      target: api
+    image: supply-chain-intel:local
+    expose:
+      - "8000"
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    restart: unless-stopped
+    # Hardening: the service never writes to disk (DuckDB file opened read-only, no bytecode cache),
+    # so it runs on a read-only root filesystem with no capabilities.
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  assistant:
+    profiles: [assistant]
+    build:
+      context: .
+      target: assistant
+    image: supply-chain-intel-assistant:local
+    env_file: # GEMINI_API_KEY (and optional ASSISTANT_MODEL); never baked into the image
+      - path: .env
+        required: false # without it the container runs degraded: /assistant/chat answers 503
+    environment: # container paths win over whatever .env says (it is written for host runs)
+      ASSISTANT_API_URL: http://api:8000
+      ASSISTANT_ROOT_PATH: /assistant
+      ASSISTANT_SESSION_DB: /app/var/assistant_sessions.db
+      ASSISTANT_LOG_PATH: /app/var/assistant.jsonl
+    expose:
+      - "8001"
+    volumes:
+      - ./data/assistant:/app/var # sessions (SQLite) and the LLM call log survive restarts
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]

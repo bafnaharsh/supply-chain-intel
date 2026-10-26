@@ -1,0 +1,59 @@
+{
+  "scenario": "predict",
+  "concurrency": 20,
+  "duration_s": 20.0,
+  "seed": 42,
+  "wall_s": 20.79,
+  "total": {
+    "endpoint": "TOTAL",
+    "requests": 337,
+    "http_errors": 8,
+    "exceptions": 0,
+    "p50_ms": 1196.8,
+    "p95_ms": 1607.4,
+    "p99_ms": 1786.3,
+    "max_ms": 1823.2,
+    "rps": 16.2
+  },
+  "endpoints": [
+    {
+      "endpoint": "POST /predict-delay (features)",
+      "requests": 167,
+      "http_errors": 8,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 159,
+        "422": 8
+      },
+      "p50_ms": 1167.0,
+      "p95_ms": 1449.6,
+      "p99_ms": 1786.3,
+      "max_ms": 1823.2,
+      "rps": 8.0
+    },
+    {
+      "endpoint": "POST /predict-delay (id)",
+      "requests": 170,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 170
+      },
+      "p50_ms": 1212.8,
+      "p95_ms": 1607.4,
+      "p99_ms": 1787.4,
+      "max_ms": 1803.8,
+      "rps": 8.2
+    }
+  ],
+  "health_probe": {
+    "samples": 19,
+    "non_200": 0,
+    "p50_ms": 875.6,
+    "p95_ms": 1095.8,
+    "max_ms": 1095.8
+  },
+  "exception_kinds": {},
+  "post_health_status": 200,
+  "recovery": []
+}

@@ -1,0 +1,11 @@
+# Single entry point on :8000. /assistant/* goes to the assistant service (prefix stripped;
+# the app sets root_path=/assistant so its /docs work), everything else to the data API.
+# Without the assistant profile the upstream does not exist and Caddy answers 502 for it.
+:8000 {
+	handle_path /assistant/* {
+		reverse_proxy assistant:8001
+	}
+	handle {
+		reverse_proxy api:8000
+	}
+}

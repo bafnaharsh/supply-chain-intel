@@ -1,0 +1,56 @@
+[project]
+name = "supply-chain-intel"
+version = "0.1.0"
+description = "Supply Chain Intelligence mini-platform: DQ checks, curated data, delay-risk ML, GenAI assistant."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "duckdb>=2.0.0",
+    "fastapi>=0.162.0",
+    "joblib>=1.6.0",
+    "pandas>=3.1.0",
+    "pydantic-settings>=2.16.1",
+    "scikit-learn>=1.9.1",
+    "uvicorn>=0.54.0",
+]
+
+[project.optional-dependencies]
+assistant = [
+    "google-adk[db]>=2.13.0",
+    "httpx>=0.28.1", # the tools call the data API with it; declared, not just transitive
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/core", "src/app", "src/dq", "src/pipeline", "src/ml", "src/assistant"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["src"]
+# The training script is exercised end to end by `python -m ml.train` (3 min), not by unit tests.
+omit = ["src/ml/train.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

@@ -1,0 +1,17 @@
+.git
+.env
+logs
+data/assistant_sessions.db*
+.github
+.venv
+**/__pycache__
+.pytest_cache
+.ruff_cache
+docs
+tests
+data/*.duckdb*
+data/assistant
+reports/data_profile.json
+deploy
+scripts
+evals

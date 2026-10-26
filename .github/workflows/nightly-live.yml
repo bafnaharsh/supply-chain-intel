@@ -1,0 +1,37 @@
+# Live checks against real Gemini. Needs the repository secret GEMINI_API_KEY; never runs on PRs.
+name: Nightly live assistant checks
+
+on:
+  schedule:
+    - cron: "17 3 * * *" # 03:17 UTC daily
+  workflow_dispatch:
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    if: ${{ vars.LIVE_CHECKS_ENABLED == 'true' }} # flip the repo variable to opt in
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.19"
+          python-version: "3.13"
+      - run: uv sync --locked --all-extras
+      - name: Start the data API
+        run: docker compose up -d --build --wait --wait-timeout 180
+      - name: Live integration tests (3 brief questions + a clarifying case)
+        env:
+          BASE_URL: http://localhost:8000
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: uv run pytest tests/integration -q
+      - name: Assistant evaluation (25 questions, ~$0.05)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: uv run python evals/run_eval.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-results
+          path: evals/results_*.json
+      - if: always()
+        run: docker compose down -v

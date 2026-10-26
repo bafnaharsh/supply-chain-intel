@@ -1,0 +1,7 @@
+# Text files are stored with LF so the Linux CI and Docker builds see the same bytes as the repo.
+* text=auto eol=lf
+# The supplied data and binary artefacts are kept byte-exact (the DQ report hashes the CSVs).
+*.csv -text
+*.joblib binary
+*.pdf binary
+*.duckdb binary

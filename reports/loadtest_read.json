@@ -1,0 +1,102 @@
+{
+  "scenario": "read",
+  "concurrency": 50,
+  "duration_s": 30.0,
+  "seed": 42,
+  "wall_s": 30.49,
+  "total": {
+    "endpoint": "TOTAL",
+    "requests": 2456,
+    "http_errors": 0,
+    "exceptions": 1,
+    "p50_ms": 493.2,
+    "p95_ms": 1551.1,
+    "p99_ms": 2776.1,
+    "max_ms": 5775.4,
+    "rps": 80.6
+  },
+  "endpoints": [
+    {
+      "endpoint": "GET /health",
+      "requests": 247,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 247
+      },
+      "p50_ms": 398.5,
+      "p95_ms": 1500.9,
+      "p99_ms": 2960.5,
+      "max_ms": 3414.9,
+      "rps": 8.1
+    },
+    {
+      "endpoint": "GET /ports",
+      "requests": 280,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 280
+      },
+      "p50_ms": 482.6,
+      "p95_ms": 1776.1,
+      "p99_ms": 2794.3,
+      "max_ms": 3909.3,
+      "rps": 9.2
+    },
+    {
+      "endpoint": "GET /routes/{o}/{d}/stats",
+      "requests": 534,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 534
+      },
+      "p50_ms": 497.4,
+      "p95_ms": 1573.7,
+      "p99_ms": 3090.3,
+      "max_ms": 3623.3,
+      "rps": 17.5
+    },
+    {
+      "endpoint": "GET /shipments/{id}",
+      "requests": 846,
+      "http_errors": 0,
+      "exceptions": 1,
+      "status_counts": {
+        "200": 845
+      },
+      "p50_ms": 489.1,
+      "p95_ms": 1567.3,
+      "p99_ms": 2516.4,
+      "max_ms": 5191.7,
+      "rps": 27.7
+    },
+    {
+      "endpoint": "GET /shipments?origin&limit=50",
+      "requests": 549,
+      "http_errors": 0,
+      "exceptions": 0,
+      "status_counts": {
+        "200": 549
+      },
+      "p50_ms": 532.0,
+      "p95_ms": 1450.1,
+      "p99_ms": 2647.7,
+      "max_ms": 5775.4,
+      "rps": 18.0
+    }
+  ],
+  "health_probe": {
+    "samples": 57,
+    "non_200": 0,
+    "p50_ms": 198.6,
+    "p95_ms": 515.0,
+    "max_ms": 599.8
+  },
+  "exception_kinds": {
+    "RemoteProtocolError": 1
+  },
+  "post_health_status": 200,
+  "recovery": []
+}

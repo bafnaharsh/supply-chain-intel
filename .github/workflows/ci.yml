@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-and-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.19"
+          python-version: "3.13"
+      - run: uv sync --locked --all-extras
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+      - name: Unit tests with coverage gate
+        run: uv run pytest tests/unit -q --cov --cov-fail-under=80
+
+  docker-and-integration:
+    needs: lint-and-unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker compose build
+      - name: Scan image (fail on fixable CRITICAL/HIGH)
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:latest image --scanners vuln --ignore-unfixed \
+            --severity CRITICAL,HIGH --exit-code 1 supply-chain-intel:local
+      - name: Start stack
+        run: docker compose up -d --wait --wait-timeout 120
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.19"
+          python-version: "3.13"
+      - run: uv sync --locked
+      - name: Integration tests
+        env:
+          BASE_URL: http://localhost:8000
+        run: uv run pytest tests/integration -q
+      - name: Service logs
+        if: failure()
+        run: docker compose logs
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

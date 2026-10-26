@@ -1,0 +1,4 @@
+event_id,event_timestamp,port_code,vessel_id,event_type,delay_minutes,notes
+EVT-000001,2024-06-05 01:00:00,CNSHA,VSL-0001,DEPARTURE,0,Normal operations
+EVT-000002,2024-06-30 22:00:00,NLRTM,VSL-0001,ARRIVAL,45,Berth congestion – 3 vessels waiting
+EVT-000003,2024-07-01 09:00:00,NLRTM,VSL-0001,DELAYED,150,Weather delay – fog
