@@ -1,16 +1,12 @@
 # Docs
 
-| Path | What it is |
+| File | What it covers |
 |---|---|
-| [`assignment/Take_Home_Assignment.pdf`](assignment/Take_Home_Assignment.pdf) | The original brief as received by email: scope, required endpoints, README sections, rubric |
-| [`../data/DATA_DETAILS.md`](../data/DATA_DETAILS.md) | Column-level description of the supplied CSVs and first-pass quality findings |
+| [`assignment/Take_Home_Assignment.pdf`](assignment/Take_Home_Assignment.pdf) | The brief as received |
+| [`engineering.md`](engineering.md) | API contract and errors, configuration, image size and CVEs, security test, load test |
+| [`data.md`](data.md) | Every data-quality finding with the decision, the passing guard checks, the four-layer data model |
+| [`ml.md`](ml.md) | Features and leakage reasoning, the candidate comparison, selection rule and provenance, monitoring |
+| [`assistant.md`](assistant.md) | Tools, clarifying behaviour, sessions, guardrails, logging, cost, HTTP API, offline mode, evaluation |
+| [`../data/DATA_DETAILS.md`](../data/DATA_DETAILS.md) | Column-level description of the supplied CSVs |
 
-## Brief at a glance
-
-Three parts of equal weight, time-boxed to about 14 hours:
-
-1. **Engineering:** API (`/health`, `/shipments`, `/shipments/{id}`, `/routes/{o}/{d}/stats`, `/predict-delay`, `/data-quality/report`), structured errors, JSON logs, unit and integration tests, Docker, CI, and a runbook.
-2. **Data:** a standalone DQ check against raw CSVs, then a layered and idempotent pipeline into a store, a curated data model, and the tech-choice write-up.
-3. **ML + GenAI:** a booking-time delay model (no leakage, honest metrics, committed artefact) and a tool-calling assistant CLI with guardrails and full LLM logging.
-
-Note: the brief asks for "all twelve DQ issues described in Section 2.1", but Section 2.1 does not list them. We find and document them ourselves.
+The brief, in one paragraph: three equal parts, about fourteen hours. Engineering — an API with six endpoints, structured errors and logs, tests, Docker, CI and a runbook. Data — a standalone DQ check on the raw CSVs, a layered idempotent pipeline into a store, a documented data model. ML and GenAI — a booking-time delay model with honest metrics and a committed artefact, and a tool-calling assistant with a guardrail and full LLM logging. The brief refers to "twelve" seeded data issues without listing them; finding them is part of the exercise.

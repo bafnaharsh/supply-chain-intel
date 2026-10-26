@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 import httpx
-from fastapi import FastAPI, Query, Request
+from fastapi import FastAPI, Query
 from google.adk.agents import LlmAgent
 from google.adk.sessions import BaseSessionService
 from pydantic import BaseModel, Field
@@ -99,7 +99,7 @@ def create_app(
         }
 
     @app.post("/chat", response_model=ChatResponse, responses={503: {"model": ErrorResponse}})
-    async def chat(body: ChatRequest, request: Request) -> ChatResponse:
+    async def chat(body: ChatRequest) -> ChatResponse:
         """One user turn. Pass back `session_id` to continue the conversation."""
         if app.state.agent is None:
             raise APIError(503, "llm_unconfigured", "GEMINI_API_KEY is not set; see .env.example")
